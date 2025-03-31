@@ -1070,6 +1070,74 @@
 
 <!-- Table of contents item -->
 <li class="md-nav__item">
+  <a href="#tilt-series" class="md-nav__link">
+    
+      Tilt Series
+    
+  </a>
+
+  <!-- Table of contents list -->
+  
+</li>
+      
+        <!--
+  Copyright (c) 2016-2022 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Table of contents item -->
+<li class="md-nav__item">
+  <a href="#tomograms" class="md-nav__link">
+    
+      Tomograms
+    
+  </a>
+
+  <!-- Table of contents list -->
+  
+</li>
+      
+        <!--
+  Copyright (c) 2016-2022 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Table of contents item -->
+<li class="md-nav__item">
   <a href="#annotations" class="md-nav__link">
     
       Annotations
@@ -1329,6 +1397,74 @@
 
 <!-- Table of contents item -->
 <li class="md-nav__item">
+  <a href="#tilt-series" class="md-nav__link">
+    
+      Tilt Series
+    
+  </a>
+
+  <!-- Table of contents list -->
+  
+</li>
+      
+        <!--
+  Copyright (c) 2016-2022 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Table of contents item -->
+<li class="md-nav__item">
+  <a href="#tomograms" class="md-nav__link">
+    
+      Tomograms
+    
+  </a>
+
+  <!-- Table of contents list -->
+  
+</li>
+      
+        <!--
+  Copyright (c) 2016-2022 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Table of contents item -->
+<li class="md-nav__item">
   <a href="#annotations" class="md-nav__link">
     
       Annotations
@@ -1372,15 +1508,17 @@ CryoET Data Portal Data Hierarchy</span><a class="headerlink" href="#id2" title=
 <p>As shown in the diagram above, the CryoET Data Portal has 3 levels in the data hierarchy:</p>
 <ul class="simple">
 <li><p><strong>Dataset</strong> is a set of image files for tilt series, reconstructed tomograms, and cellular and/or subcellular annotation files. Every dataset contains only one sample type prepared with the same conditions. The dataset title, such as “S. pombe cryo-FIB lamellae acquired with defocus-only,” summarizes these conditions. Samples can be a cell, tissue or organism; intact organelle; in-vitro mixture of macromolecules or their complex; or in-silico synthetic data, where the experimental conditions are kept constant. Datasets typically contain multiple runs (see below). Downloading a dataset downloads all files, including all available tilt series, tomograms, and annotations.</p></li>
-<li><p><strong>Run</strong> is one experiment, or replicate, within a dataset, where all runs in a dataset have the same sample conditions. Every run contains a collection of all tomography data and annotations related to imaging one physical location in a sample. It typically contains one tilt series and all associated data (e.g. movie frames, tilt series image stack, tomograms, annotations, and metadata), but in some cases, it may be a set of tilt series that form a mosaic. Runs contain at least one annotation for every tomogram. When downloading a run from a Portal page, you may choose to download the tomogram or all available annotations. To download all data associated with a run (i.e. all available movie frames, tilt series image stack, tomograms, annotations, and associated metadata), <a class="reference internal" href="#run-download-options">use the API</a>.</p></li>
+<li><p><strong>Run</strong> is one experiment, or replicate, within a dataset, where all runs in a dataset have the same sample conditions. Every run contains a collection of all tomography data and annotations related to imaging one physical location in a sample, and within one dataset, runs may correspond to individual locations within a single sample. Each run typically contains one tilt series and all associated data (e.g. movie frames, tilt series image stack, tomograms, annotations, and metadata), but in some cases, it may be a set of tilt series that form a mosaic. Runs contain at least one annotation for every tomogram. When downloading a run from a Portal page, you may choose to download the tomogram or all available annotations. To download all data associated with a run (i.e. all available movie frames, tilt series image stack, tomograms, annotations, and associated metadata), <a class="reference internal" href="#run-download-options">use the API</a>.</p></li>
 <li><p><strong>Annotation</strong> is a point or segmentation indicating the location of a macromolecular complex in the tomogram. On a run overview page, you may choose to download individual annotations.</p></li>
 </ul>
 <p>All data is added to the Portal through Depositions, which is described below, and a subset of depositions are displayed in the depositions tab on the Portal.</p>
-<p>For more detailed explanations refer to the sections below.</p>
+<p>For more detailed explanations of all data types in the Portal refer to the sections below.</p>
 <ol class="arabic simple">
 <li><p><a class="reference internal" href="#depositions">Depositions</a></p></li>
 <li><p><a class="reference internal" href="#datasets">Datasets</a></p></li>
 <li><p><a class="reference internal" href="#runs">Runs</a></p></li>
+<li><p><a class="reference internal" href="#tilt-series">Tilt Series</a></p></li>
+<li><p><a class="reference internal" href="#tomograms">Tomograms</a></p></li>
 <li><p><a class="reference internal" href="#annotations">Annotations</a></p></li>
 </ol>
 <h2 id="depositions">Depositions<a class="headerlink" href="#depositions" title="Link to this heading">¶</a></h2>
@@ -1522,38 +1660,6 @@ Types of depositions</span><a class="headerlink" href="#id3" title="Permalink to
 </table>
 <h3 id="dataset-overview-page">Dataset Overview Page<a class="headerlink" href="#dataset-overview-page" title="Link to this heading">¶</a></h3>
 <p>The table on a Dataset Overview page contains an overview of the runs in the dataset. Each run has a name defined by the dataset authors as well as a Run ID, which is assigned by the Portal and is subject to change in the rare case where the run data needs to be re-ingested to the Portal. In addition to the run name, the <a class="reference internal" href="#tilt-series-quality">tilt series quality</a> and list of annotated objects is detailed for each run. Each entry has a <code class="docutils literal notranslate"><span class="pre">View</span> <span class="pre">Tomogram</span></code> button which will display the tomogram using an instance of Neuroglancer in the browser. The tomogram is visualized along with annotations that are manually chosen to display as many annotations as possible without overlap or occlusion.</p>
-<h4 id="tilt-series-quality">Tilt Series Quality<a class="headerlink" href="#tilt-series-quality" title="Link to this heading">¶</a></h4>
-<p>The tilt series quality score is assigned by the dataset authors to communicate their quality estimate to users. This score is only applicable for comparing tilt series within a dataset on a relative subjective scale. Score ranges 1-5, with 5 being best. Below is an example scale based mainly on alignability and usefulness for the intended analysis.</p>
-<table class="docutils data align-default">
-<thead>
-<tr class="row-odd"><th class="head text-center"><p>Rating</p></th>
-<th class="head text-center"><p>Quality</p></th>
-<th class="head text-left"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td class="text-center"><p>5</p></td>
-<td class="text-center"><p>Excellent</p></td>
-<td class="text-left"><p>Full Tilt Series/Reconstructions could be used in publication ready figures.</p></td>
-</tr>
-<tr class="row-odd"><td class="text-center"><p>4</p></td>
-<td class="text-center"><p>Good</p></td>
-<td class="text-left"><p>Full Tilt Series/Reconstructions are useful for analysis (subtomogram averaging, segmentation).</p></td>
-</tr>
-<tr class="row-even"><td class="text-center"><p>3</p></td>
-<td class="text-center"><p>Medium</p></td>
-<td class="text-left"><p>Minor parts of the tilt series (projection images) need to be or have been discarded prior to reconstruction and analysis.</p></td>
-</tr>
-<tr class="row-odd"><td class="text-center"><p>2</p></td>
-<td class="text-center"><p>Marginal</p></td>
-<td class="text-left"><p>Major parts of the tilt series (projection images) need to be or have been discarded prior to reconstruction and analysis. Useful for analysis only after heavy manual intervention.</p></td>
-</tr>
-<tr class="row-even"><td class="text-center"><p>1</p></td>
-<td class="text-center"><p>Low</p></td>
-<td class="text-left"><p>Not useful for analysis with current tools (not alignable), useful as a test case for problematic data only.</p></td>
-</tr>
-</tbody>
-</table>
 <h3 id="dataset-download-options">Dataset Download Options<a class="headerlink" href="#dataset-download-options" title="Link to this heading">¶</a></h3>
 <figure class="align-center" id="id4">
 <img alt="File Structure of a downloaded dataset" src="_images/dataset_download.png" />
@@ -1688,7 +1794,7 @@ File Structure of a downloaded dataset</span><a class="headerlink" href="#id4" t
 </tr>
 <tr class="row-odd"><td><p>Size (x, y, z)</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">(Tomogram.size_x,</span> <span class="pre">Tomogram.size_y,</span> <span class="pre">Tomogram.size_z)</span></code> or <code class="docutils literal notranslate"><span class="pre">Tomogram.scale0_dimensions</span></code></p></td>
-<td><p>Comma separated x,y,z dimensions of the unscaled tomogram.</p></td>
+<td><p>Comma separated x,y,z dimensions of the unscaled tomogram in pixels.</p></td>
 </tr>
 <tr class="row-even"><td><p>Fiducial Alignment Status</p></td>
 <td><p>Tomogram.fiducial_alignment_status</p></td>
@@ -1726,6 +1832,195 @@ File Structure of a downloaded dataset</span><a class="headerlink" href="#id4" t
   </figcaption>
 </figure>
 <p>Runs are downloaded as folders named the author-chosen run name. As shown in the diagram above, the folder contains subfolders named Alignments, Frames, Gains, Reconstructions, and TiltSeries; and a JSON file named <code class="docutils literal notranslate"><span class="pre">run_metadata.json</span></code> containing the run metadata. The Alignments folder contains a JSON file for every alignment that specifies the alignment parameters including the affine transformation matrix. The Frames and Gains folders contain the raw movie frames and the gain files for correcting for the detector’s sensitivity, respectively. The TiltSeries folder contains the tilt series images as an MRC file and OME-Zarr directory as well as a JSON file with the tilt series metadata. The Reconstructions folder has a subfolder for every voxel spacing available, and each of those folders contains subfolders NeuorglancerPrecompute, which has files for visualizing the data in Neuroglancer; Images, which contains the key photos of the run displayed on the Portal; Tomograms, which has the tomograms associated with the run as an MRC file and OME-Zarr directory along with tomogram metadata and metadata for visualizing the tomogram with Neuroglancer; and Annotations. More details on the Annotation folder file structure is found in the documentation <a class="reference internal" href="#annotation-download-options">below</a>.</p>
+<h2 id="tilt-series">Tilt Series<a class="headerlink" href="#tilt-series" title="Link to this heading">¶</a></h2>
+<p>Please refer to our educational article about <a class="reference internal" href="cryoet_workflow.html#data-collection"><span class="std std-ref">CryoET Data Collection</span></a> for a detailed description of tilt series. Each tilt series has a Tilt Series ID, which is assigned by the Portal and is subject to change in the rare case where the tilt series data needs to be re-ingested in the Portal. Tilt Series IDs start with TS (e.g. TS-12345; note that only the numeric part is supported in the API).</p>
+<h3 id="frames">Frames<a class="headerlink" href="#frames" title="Link to this heading">¶</a></h3>
+<p>When acquiring tilted projections of a sample as part of a CryoET tilt series acquisition, one actually acquires a movie at each tilt (stored as so-called “movie stacks” or “frame stacks”) so that beam induced motion can be corrected after acquisition by compensating translations and warping. Upon correction, these frames are summed to form a single image at each tilt angle, and the collection of images is referred to as the tilt series. Usually, each run of a CryoET dataset will have 30-50 frame stacks of 5-100 frames associated with it, where the number of stacks is the same as the number of tilts during acquisition. Acquisition metadata are stored in MDOC-files, which are text-based with one section per frame stack.</p>
+<p>When available, the <code class="docutils literal notranslate"><span class="pre">Frames</span></code> folder in a downloaded run contains the raw frame images, acquisition metadata MDOC file, and an additional metadata file in JSON format.</p>
+<h3 id="gains">Gains<a class="headerlink" href="#gains" title="Link to this heading">¶</a></h3>
+<p>Individual pixels or whole sectors of the direct electron detector used in <a class="reference internal" href="intro_cryoet.html#electron"><span class="std std-ref">CryoET Data Acquisition</span></a> can have different responses to the same incident signal. In order to control for this uneven detector response, an image is acquired without any sample in the beam path. This flat-field image, called a “gain reference”, allows correction of the recorded signal in the images acquired of a real sample. A single gain reference can be applicable to multiple runs of a cryoET dataset.</p>
+<p>When available, the <code class="docutils literal notranslate"><span class="pre">Gains</span></code> folder in a downloaded run contains the gain reference image.</p>
+<h3 id="tilt-series-assembly">Tilt Series Assembly<a class="headerlink" href="#tilt-series-assembly" title="Link to this heading">¶</a></h3>
+<p>The raw frame stacks from image acquisition are motion corrected and averaged at each tilt angle to form the tilt series. Please refer to our educational article about <a class="reference internal" href="cryoet_workflow.html#data-collection"><span class="std std-ref">CryoET Data Collection</span></a> for a detailed description of tilt series assembly from the raw frame stacks.</p>
+<p>When available, the <code class="docutils literal notranslate"><span class="pre">TiltSeries</span></code> folder in a downloaded run contains the tilt series images in MRC and OME-Zarr file format, tilt series metadata JSON file, and the rawtlt file. The rawtlt file contains a list of the tilt angles from image acquisition and is used by downstream programs for alignment and tomogram reconstruction.</p>
+<h3 id="tilt-series-quality">Tilt Series Quality<a class="headerlink" href="#tilt-series-quality" title="Link to this heading">¶</a></h3>
+<p>The tilt series quality score is found on Dataset Overview pages in the run table and on Run Overview pages in the header. This score is assigned by the dataset authors to communicate their quality estimate to users. This score is only applicable for comparing tilt series within a dataset on a relative subjective scale. Score ranges 1-5, with 5 being best. Below is an example scale based mainly on alignability and usefulness for the intended analysis.</p>
+<table class="docutils data align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Rating</p></th>
+<th class="head text-center"><p>Quality</p></th>
+<th class="head text-left"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>5</p></td>
+<td class="text-center"><p>Excellent</p></td>
+<td class="text-left"><p>Full Tilt Series/Reconstructions could be used in publication ready figures.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>4</p></td>
+<td class="text-center"><p>Good</p></td>
+<td class="text-left"><p>Full Tilt Series/Reconstructions are useful for analysis (subtomogram averaging, segmentation).</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>3</p></td>
+<td class="text-center"><p>Medium</p></td>
+<td class="text-left"><p>Minor parts of the tilt series (projection images) need to be or have been discarded prior to reconstruction and analysis.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>2</p></td>
+<td class="text-center"><p>Marginal</p></td>
+<td class="text-left"><p>Major parts of the tilt series (projection images) need to be or have been discarded prior to reconstruction and analysis. Useful for analysis only after heavy manual intervention.</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>1</p></td>
+<td class="text-center"><p>Low</p></td>
+<td class="text-left"><p>Not useful for analysis with current tools (not alignable), useful as a test case for problematic data only.</p></td>
+</tr>
+</tbody>
+</table>
+<h2 id="tomograms">Tomograms<a class="headerlink" href="#tomograms" title="Link to this heading">¶</a></h2>
+<p>Please refer to our educational article about <a class="reference internal" href="cryoet_workflow.html#image-preprocessing"><span class="std std-ref">CryoET Data Processing</span></a> for a high level description of how tomograms are reconstructed from tilt series. Part of the tomogram reconstruction process, involves aligning the tilt series and correcting it using an estimated contrast transfer function (CTF). A detailed article on this process is coming soon. On the Portal, alignnment metadata JSON files are available for every tomogram, and these files contain the affine transformation matrix along with information such as the alignment type (e.g. local vs global).</p>
+<p>Tomograms are summarized in a table on Run Overview pages. Note that by default the Annotations table is displayed on the Run Overview pages, but you can toggle to the Tomograms table by clicking the tab above the table. Each tomogram has a Tomogram ID, which is assigned by the Portal and is subject to change in the rare case where the tomogram data needs to be re-ingested in the Portal. Tomogram IDs start with TM (e.g. TM-6091; note that only the numeric part is supported in the API).</p>
+<p>The Tomogram table has columns with the author-chosen Tomogram Name (including the Tomogram ID and a truncated list of authors), Deposition Date, Alignment ID (ID of the alignment file used to align the tilt series for tomogram reconstruction), Voxel Spacing (containing both the voxel spacing in angstroms and the size of the tomogram in pixels), Reconstruction Method (e.g. WBP for weighted back projection), and Post-Processing information (e.g. denoised, filtered, etc.).</p>
+<p>When available, each tomogram in the table has its own <code class="docutils literal notranslate"><span class="pre">View</span> <span class="pre">Tomogram</span></code> button which will open Neuroglancer in a new tab with the tomogram along with all its available annotations preloaded. Check out our <a class="reference internal" href="neuroglancer_quickstart.html"><span class="doc std std-doc">Neuroglancer Quickstart</span></a> to learn more about navigating Neuroglancer.</p>
+<p>Each tomogram entry in the table also has a <code class="docutils literal notranslate"><span class="pre">Download</span></code> button which opens a dialog containing direct download and code snippets for other download methods.</p>
+<p>Each tomogram has its own metadata, which can be viewed using the info icon on the entry in the tomograms table. These metadata are defined in the tables below including their mapping to attributes in the Portal API:</p>
+<p><strong>Tomogram Overview</strong></p>
+<table class="docutils data align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Portal Metadata</strong></p></th>
+<th class="head"><p><strong>API Expression</strong></p></th>
+<th class="head"><p><strong>Definition</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Authors</p></td>
+<td><p>Tomogram.authors</p></td>
+<td><p>The tomogram authors of this tomogram.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Publications</p></td>
+<td><p>Tomogram.publications</p></td>
+<td><p>Comma-separated list of DOIs for publications associated with the tomogram.</p></td>
+</tr>
+<tr class="row-even"><td><p>Related Databases</p></td>
+<td><p>Tomogram.related_database_entries</p></td>
+<td><p>If a CryoET tomogram is also deposited into another database, enter the database identifier here (e.g. EMPIAR-11445). Use a comma to separate multiple identifiers.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Deposition Name</p></td>
+<td><p>Tomogram.deposition</p></td>
+<td><p>The name of the deposition this tomogram is a part of.</p></td>
+</tr>
+<tr class="row-even"><td><p>Deposition ID</p></td>
+<td><p>Tomogram.deposition_id</p></td>
+<td><p>The ID of the deposition this tomogram is a part of.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Deposition Date</p></td>
+<td><p>Tomogram.deposition_date</p></td>
+<td><p>Date when a tomogram is initially received by the Data Portal.</p></td>
+</tr>
+<tr class="row-even"><td><p>Release Date</p></td>
+<td><p>Tomogram.release_date</p></td>
+<td><p>Date when a tomogram is made public by the Data Portal.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Last Modified Date</p></td>
+<td><p>Tomogram.last_modified_date</p></td>
+<td><p>Date when a tomogram was last modified in the Data Portal.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Reconstruction and Processing</strong></p>
+<table class="docutils data align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Portal Metadata</strong></p></th>
+<th class="head"><p><strong>API Expression</strong></p></th>
+<th class="head"><p><strong>Definition</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Portal Standard Status</p></td>
+<td><p>Tomogram.is_portal_standard</p></td>
+<td><p>Whether this tomogram adheres to portal standards.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Submitted by Dataset Author</p></td>
+<td><p>Tomogram.is_author_submitted</p></td>
+<td><p>Whether this tomogram was submitted by the author of the dataset it belongs to.</p></td>
+</tr>
+<tr class="row-even"><td><p>Reconstruction Software</p></td>
+<td><p>Tomogram.reconstruction_software</p></td>
+<td><p>Name of software used for reconstruction</p></td>
+</tr>
+<tr class="row-odd"><td><p>Reconstruction Method</p></td>
+<td><p>Tomogram.reconstruction_method</p></td>
+<td><p>Describe reconstruction method (WBP, SART, SIRT).</p></td>
+</tr>
+<tr class="row-even"><td><p>Processing Software</p></td>
+<td><p>Tomogram.processing_software</p></td>
+<td><p>Processing software used to derive the tomogram.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Processing</p></td>
+<td><p>Tomogram.processing</p></td>
+<td><p>Describe additional processing used to derive the tomogram</p></td>
+</tr>
+<tr class="row-even"><td><p>Voxel Spacing</p></td>
+<td><p>Tomogram.voxel_spacing</p></td>
+<td><p>Voxel spacing equal in all three axes in angstroms</p></td>
+</tr>
+<tr class="row-odd"><td><p>Size (x,y,z)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(Tomogram.size_x,</span> <span class="pre">Tomogram.size_y,</span> <span class="pre">Tomogram.size_z)</span></code> or <code class="docutils literal notranslate"><span class="pre">Tomogram.scale0_dimensions</span></code></p></td>
+<td><p>Comma separated x,y,z dimensions of the unscaled tomogram in pixels.</p></td>
+</tr>
+<tr class="row-even"><td><p>Fiducial Alignment Status</p></td>
+<td><p>Tomogram.fiducial_alignment_status</p></td>
+<td><p>Fiducial Alignment status: True = aligned with fiducial False = aligned without fiducial.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ctf Corrected</p></td>
+<td><p>Tomogram.ctf_corrected</p></td>
+<td><p>Whether this tomogram is CTF corrected</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Alignment</strong></p>
+<table class="docutils data align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Portal Metadata</strong></p></th>
+<th class="head"><p><strong>API Expression</strong></p></th>
+<th class="head"><p><strong>Definition</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Alignment ID</p></td>
+<td><p>Tomogram.alignment_id</p></td>
+<td><p>The ID of the alignment used to generate this tomogram.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Canonical Status</p></td>
+<td><p>–</p></td>
+<td><p>Whether or not the tomogram is considered canonical, meaning as minimal processing as possible.</p></td>
+</tr>
+<tr class="row-even"><td><p>Alignment Type</p></td>
+<td><p>–</p></td>
+<td><p>Method of alignment used to generate the tomogram (e.g. local, global, fiducial-based, etc.)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dimension (x,y,z)</p></td>
+<td><p>–</p></td>
+<td><p>Comma separated x,y,z dimensions of the unscaled tomogram in angstroms.</p></td>
+</tr>
+<tr class="row-even"><td><p>Offset (x,y,z)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(Tomogram.offset_x,</span> <span class="pre">Tomogram.offset_y,</span> <span class="pre">Tomogram.offset_z)</span></code></p></td>
+<td><p>Comma separated x,y,z offsets of the data relative to the canonical tomogram in pixels.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Rotation (x)</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-even"><td><p>Tilt Offset</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p>Affine Transformation Matrix</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+</tbody>
+</table>
+<h3 id="tomogram-download-options">Tomogram Download Options<a class="headerlink" href="#tomogram-download-options" title="Link to this heading">¶</a></h3>
+<p>Individual entries in the Tomograms table can be downloaded using the <code class="docutils literal notranslate"><span class="pre">Download</span></code> button on the right side of each entry in the table. This button opens a dialog with tomogram selection in a drop down by name (whichever tomogram entry was chosen will be loaded by default) along with a dropdown to chose between MRC and OME-Zarr file format. On the next page of the dialog, the tomogram can be downloaded directly or if desired, code snippets and instructions are available in separate tabs for downloading the tomogram via cURL, <a class="reference internal" href="cryoet_data_portal_docsite_aws.html"><span class="doc std std-doc">AWS CLI</span></a>, or the <a class="reference internal" href="api_reference.html#api-reference"><span class="std std-ref">Portal API</span></a>.</p>
 <h2 id="annotations">Annotations<a class="headerlink" href="#annotations" title="Link to this heading">¶</a></h2>
 <p>Annotations are summarized in a table on Run Overview pages. Each annotation has an Annotation ID, which is assigned by the Portal and is subject to change in the rare case where the annotation data needs to be re-ingested in the Portal. Annotation IDs start with AN (e.g. AN-2480; note that only the numeric part is supported in the API). Each annotation labels exactly one type of object, such as ribosome or membrane, indicated by the Object Type column of the table. For every object, there is one type of annotation per entry in the table indicated in the Object Shape Type column. The options are Segmentation for semantic segmentation masks, Instance Segmentation for segmentation masks where each individual object is labeled with its own color, Point for point annotations, and Oriented Point for point annotations that have an associated rotation matrix. The method used for generating the annotation is displayed for each annotation with manual meaning the annotations were created by hand, automated meaning automated tools or algorithms without supervision were used, and hybrid meaning the annotations were generated using a combination of automated and manual methods.</p>
 <p>Annotations also have an optional precision field, which is the percentage of true positives among the total number of positive predictions where a value of 100% means everything found is actually the object of interest, and a recall field, which is the percentage of true positives among the actual number of objects where a value of 100% meaning all objects of interest were found. The Precision and Recall fields can only be calculated by comparing with a ground truth annotation, so for many annotations on the Portal, this field is marked NA for not available.</p>
@@ -1842,7 +2137,8 @@ File Structure of a downloaded dataset</span><a class="headerlink" href="#id4" t
 </tbody>
 </table>
 <h3 id="visualizing-annotations-with-tomograms-in-neuroglancer">Visualizing Annotations with Tomograms in Neuroglancer<a class="headerlink" href="#visualizing-annotations-with-tomograms-in-neuroglancer" title="Link to this heading">¶</a></h3>
-<p>There is no definitive rule for which annotations are displayed with a tomogram in Neuroglancer by default. The annotations are manually chosen by the data curation team to display as many annotations as possible without overlap or occlusion. For example, when the cytoplasm is annotated as a whole, it would occlude other annotations, such as protein picks. When there is a ground truth and predicted annotation, the ground truth annotation is displayed by default. Authors contributing data can specify the desired default annotations during the submission process.</p>
+<p>On the upper right hand side of Run Overview pages, the <code class="docutils literal notranslate"><span class="pre">View</span> <span class="pre">Tomogram</span></code> button opens Neuroglancer in a new tab with the “default” tomogram along with all its available annotations preloaded. The tooltip on the <code class="docutils literal notranslate"><span class="pre">View</span> <span class="pre">Tomogram</span></code> button specifies the ID of the “default” tomogram. By navigating to the Tomogram table using the tab above the Annotations table, you may also click the <code class="docutils literal notranslate"><span class="pre">View</span> <span class="pre">Tomogram</span></code> button for a specific tomogram entry to open it in Neuroglancer with applicable annotations preloaded. Check out our <a class="reference internal" href="neuroglancer_quickstart.html"><span class="doc std std-doc">Neuroglancer Quickstart</span></a> to learn more about navigating Neuroglancer.</p>
+<p>There is no definitive rule for which annotations are open in the Neuroglancer canvases with a tomogram by default. However, all annotations can be opened in the canvas by clicking any annotation layers with strikethrough text in the list above the canvases. The annotations shown by default are manually chosen by the data curation team to display as many annotations as possible without overlap or occlusion. For example, when the cytoplasm is annotated as a whole, it would occlude other annotations, such as protein picks. When there is a ground truth and predicted annotation, the ground truth annotation is displayed by default. Authors contributing data can specify the desired default annotations during the submission process.</p>
 <p>The CryoET Data Portal napari plugin can be used to visualize tomograms, annotations, and metadata. Refer to <a class="reference external" href="https://github.com/chanzuckerberg/napari-cryoet-data-portal#usage">this documentation</a> to learn about how to use the plugin and to <a class="reference internal" href="cryoet_data_portal_docsite_napari.html"><span class="doc std std-doc">this page</span></a> to learn more about napari and CryoET Data Portal.</p>
 <h3 id="annotation-download-options">Annotation Download Options<a class="headerlink" href="#annotation-download-options" title="Link to this heading">¶</a></h3>
 <p>Individual entries in the annotations table can be downloaded using the <code class="docutils literal notranslate"><span class="pre">Download</span></code> button on the right side of the table.</p>
