@@ -1,7 +1,7 @@
 import './ViewerPage.css'
 
 import { currentNeuroglancerState, NeuroglancerWrapper, ResolvedSuperState, updateState } from 'neuroglancer'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { cns } from 'app/utils/cns'
 import { CryoETHomeLink } from '../Layout/CryoETHomeLink'
 import { Breadcrumbs } from 'app/components/Breadcrumbs'
@@ -9,7 +9,10 @@ import { Button } from '@czi-sds/components'
 import { InfoIcon } from 'app/components/icons'
 import { MenuItemLink } from "app/components/MenuItemLink";
 import { CustomDropdown, CustomDropdownSection, CustomDropdownOption } from '../common/CustomDropdown'
-import { ABOUT_LINKS, REPORT_LINKS, NEUROGLANCER_HELP_LINKS } from '../Layout/constants'
+import { ACTIONS } from 'react-joyride'
+import Tour from './Tour'
+import { getTutorialSteps } from './steps';
+import { ABOUT_LINKS, REPORT_LINKS, NEUROGLANCER_DOC_LINK  } from '../Layout/constants'
 import { useI18n } from 'app/hooks/useI18n'
 
 const BACKGROUND_COLOR = "#ffffff"
@@ -119,16 +122,55 @@ const setCurrentLayout = (layout: string) => {
 function ViewerPage({ run } : { run: any }) {
   const { t } = useI18n()
   const [renderVersion, setRenderVersion] = useState(0)
+  const [annotations, setAnnotations] = useState<any>([])
+  const [tourRunning, setTourRunning] = useState(false);
+  const [stepIndex, setStepIndex] = useState<number>(0);
 
   const refresh = () => {
     setRenderVersion(renderVersion + 1)
   }
+
+  const handleTourStart = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    localStorage.setItem("startTutorial", "true")
+    window.open("http://localhost:8080/view/runs/16463/#!H4sIAAAAAAAAA-1YTZObNhj-LT34aEYIMHCs7XEuabuT7WyPHhlkW12BGEk46_31fRFfEsZJNpNMDl3vDhi9318PkhfxeoFxSWspTpyUGZXwuAh-b644-G2Bo4YhwjhnBS0VE6Uyj4alp71YS9Ha9xDyMV2mzerGkIqWAajbcfH6XVKvb5OKLdFKKKYhAkdD4EeGo7-nU4OZFEo90qyRfMwIp72470VxZGmX4t-W6y_JaKnJjSnkBQleJUGIV37ox0HSeo3sq5fiIInTCIUYBXG6CifejFYcX1ZpMPJwcqVSOabHWulrRS0SxqwgJ9rnrNOgRC0zl-2VSGm-7-D_rHWlhqcj41R5mbwKqnOiSSWkJtzLXpnKIBMZ9TIBVdn5KAwhzN3fj_toD4HtPtEM-knL2gQEHu-exAvljxXJWHnykQe1bfhFIU6SFMroGDV4xifXc00Ojtt2JAOTaAzoof_8kXLgtMwdBSTPoWkuUxWZyOkTU-ww1uBIuKJWDs8kp9LRBRNVMwhZS8GbBcTKC6eyMt_NOlG6qdemvGE9iFGGSr232EH2TLPng3jpZZvrkQvSUk_UZU-ai-k91PdFK2WeMRolL4TXtCUE27vWF8HO3GEYzX05jcex2OZinhzc-CKprmXpOGMxmekeIr4IZmqHCsLKtwUqal3V-unWQsfp0sd03E3trQpaMP1Bkqvq5zaZKE1nYnOG0jTUpu2JGRS2_XApkpQne5qj9RJmCz4Y-yjBKEl8FOAARR0GtaQI-_AXp8lqFflhPAGiz6zMxec5pQEoC1Ea-AGIo1VqKQ38MIxRGsN6uALVCxulbai-CF4X9BMMI5UABR-6gjamlrGXjIwlKVyc6sGlTd2o8x78kbIUNlZ_CQMrCYBVQM1o_oug8E_rRf0weNPi4vJIpQSsKvfNMqcvS-yhfSVYqb8CkrLP84RvzM1GcHGDZWGOMj_9KcA4Tqbxf3jXIcVZJ5wU0BPBtsnMoBsm_wXWcAtE7ZLStLL40sU8vlpYML4dZs1NrfnfYu278Ikdh--J7VWDPh0Adf60SnLoMiLzWfhRVA9FTC40MyOS5PRIam5RBmWbaS7S-9AGuh-aMv1B5DOVj-y1xbdJ6ZpLi_2wian2OYPR1XRi9lsMrIWEovzDcn02wsjz3yY6kwinrvcfvpKPN2O2m6LJZmRmm2Jj5A30mb1R08odDpiHDgvGWeo9_B9Bo788UE32pLhyoujPhkWEjse2Eu-w-A6L77D462HRCKM1YMCyw4A7cGhvcM_Q4hvr7L8m2fNJirrMg22vH0DJnmDKgZXmH5vz921QChQ6jnF6nELQsYPqhgd5kbXRVV37NJQQj7nHFxdVXJf4xJX7-2P3h44x2DsQ13wmvoMtONE4rGFFSsonfGfKq4dx_Yspkux0nuZIjscONAkBuhreeyf1g9RPW6stsPuzTn_EGqUsXZd5xLd1mgp9ZErf8Xnizkyf-F5oj9bb-mQ4eeFFvP0PS_e8OA0UAAA", "_blank")
+  }
+
+  const handleTourClose = () => {
+    setTourRunning(false)
+    setTimeout(() => {
+      setStepIndex(0)
+    }, 300)
+  }
+
+  const handleTourStepMove = (index: number, action: (typeof ACTIONS)[keyof typeof ACTIONS]) => {
+    setStepIndex(index + (action === ACTIONS.PREV ? -1 : 1)); 
+  }
+
+  const handleRestart = () => {
+    setTourRunning(false)
+    setTimeout(() => {
+      setStepIndex(0)
+      setTourRunning(true)
+    }, 300)
+  };
+
+  useEffect(() => {
+    const shouldStartTutorial = localStorage.getItem("startTutorial") === "true"
+
+    if (shouldStartTutorial) {
+      setTourRunning(true)
+
+      localStorage.removeItem("startTutorial")
+    }
+  }, [])
 
   const activeBreadcrumbText = (
     <p>
       {run.name} <span className='text-sds-color-primitive-common-white opacity-60'>(#RN-{run.id})</span>
     </p>
   );
+
 
   return (
     <div className="flex flex-col overflow-hidden h-full">
@@ -202,11 +244,12 @@ function ViewerPage({ run } : { run: any }) {
                 ))}
               </CustomDropdownSection>
               <CustomDropdownSection title="Neuroglancer help">
-                {NEUROGLANCER_HELP_LINKS.map((option) => (
-                  <MenuItemLink key={option.label} to={option.link}>
-                    {t(option.label)}
-                  </MenuItemLink>
-                ))}
+                <MenuItemLink to={NEUROGLANCER_DOC_LINK}>
+                  {t('goToNeuroglancerDocumentation')}
+                </MenuItemLink>
+                <button type="button" className="py-1.5 px-2" onClick={handleTourStart}>
+                  {t('neuroglancerWalkthrough')}
+                </button>
               </CustomDropdownSection>
             </CustomDropdown>
           </div>
@@ -215,6 +258,7 @@ function ViewerPage({ run } : { run: any }) {
       <div className="iframe-container">
         <NeuroglancerWrapper onStateChange={refresh} />
       </div>
+      {run && <Tour run={tourRunning} stepIndex={stepIndex} steps={getTutorialSteps()} onRestart={handleRestart} onClose={handleTourClose} onMove={handleTourStepMove}/>}
     </div>
   )
 }
