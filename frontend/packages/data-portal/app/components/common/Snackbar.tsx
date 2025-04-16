@@ -42,7 +42,7 @@ const Snackbar = ({
           color: #1B9C4A;
         }
       `}</style>
-      <p className="!font-semibold !m-0 p-0">{title}</p>
+      <p className="!font-semibold !m-0 p-0 text-black">{title}</p>
       {description}
     </Notification>
   )

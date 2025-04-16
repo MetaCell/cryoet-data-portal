@@ -183,7 +183,7 @@ export function Breadcrumbs({
                   : `${t('dataset')}: ${data.title}`
               }
               link={singleDatasetLink}
-              className="overflow-ellipsis overflow-hidden flex-initial"
+              className={cns(typeStyles[type], "overflow-ellipsis overflow-hidden flex-initial")}
               type={BreadcrumbType.SingleDataset}
               datasetId={data.id}
             />
@@ -198,7 +198,10 @@ export function Breadcrumbs({
             <Breadcrumb
               text={data.title || t('dataset')}
               link={singleDatasetLink}
-              className="overflow-ellipsis overflow-hidden flex-initial"
+              className={cns(
+                'overflow-ellipsis overflow-hidden flex-initial',
+                typeStyles[type]
+              )}
               type={BreadcrumbType.SingleDataset}
               datasetId={data.id}
             />
@@ -217,7 +220,7 @@ export function Breadcrumbs({
             {chevronIcon}
             <Breadcrumb
               text={activeBreadcrumbText}
-              className={cns(typeStyles[type], 'shrink-0 !font-normal')}
+              className={cns(typeStyles[type], 'shrink-0 !font-normal', type==="light" && "text-white")}
             />
           </>
         )}

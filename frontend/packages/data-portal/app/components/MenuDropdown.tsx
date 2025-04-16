@@ -37,7 +37,7 @@ export function MenuDropdown({
     standard: anchorEl
       ? 'text-sds-color-primitive-common-white'
       : 'text-sds-color-primitive-gray-400 group-hover:text-sds-color-primitive-common-white',
-    outlined: 'text-[#A2C9FF]',
+    outlined: '!text-[#A2C9FF]',
     filled: '!fill-sds-color-primitive-common-white',
   }
 
@@ -81,7 +81,7 @@ export function MenuDropdown({
         <button
           onClick={() => setAnchorEl(menuRef.current)}
           type="button"
-          className="text-[#999] hover:text-sds-color-primitive-common-white"
+          className="text-[#999] hover:text-white"
         >
           <span ref={menuRef}>{buttonElement}</span>
         </button>
