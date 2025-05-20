@@ -165,7 +165,7 @@ export const getTutorialSteps: () => Step[] = () => [
     title: 'Layer management',
     placement: 'right-start',
     content: (
-      <StepContent variant="simple">
+      <StepContent variant="simple" className="!flex-row">
         <div className="mt-4 mb-4">
           <img
             src="/images/neuroglancer_tour/layer_management.gif"
@@ -253,7 +253,7 @@ export const getTutorialSteps: () => Step[] = () => [
           <span>
             <InfoIcon className="w-5 h-5" />
           </span>
-           help menu.
+          help menu.
         </p>
       </StepContent>
     ),
