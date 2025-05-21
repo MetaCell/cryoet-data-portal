@@ -402,7 +402,6 @@ function ViewerPage({ run, tomogram }: { run: any; tomogram: any }) {
           <Breadcrumbs
             variant="neuroglancer"
             data={run.dataset}
-            type="light"
             activeBreadcrumbText={activeBreadcrumbText}
           />
         </div>
@@ -479,7 +478,7 @@ function ViewerPage({ run, tomogram }: { run: any; tomogram: any }) {
                   selected={currentState().savedPanelsStatus !== undefined}
                   onSelect={togglePanels}
                 >
-                  Hide panels
+                  Hide UI
                 </CustomDropdownOption>
                 <CustomDropdownOption
                   selected={isTopBarVisible()}
