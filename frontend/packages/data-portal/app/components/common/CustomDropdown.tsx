@@ -1,7 +1,7 @@
-import { ReactNode, ComponentProps } from 'react'
-import { MenuDropdown } from 'app/components/MenuDropdown'
+import React, { ReactNode, ComponentProps, useRef } from 'react'
+import { MenuDropdown, MenuDropdownRef } from 'app/components/MenuDropdown'
+import { Icon, MenuItem } from '@czi-sds/components'
 import { MenuItemHeader } from 'app/components/MenuItemHeader'
-import { MenuItem, Icon } from '@czi-sds/components'
 import { cns } from 'app/utils/cns'
 
 type CustomDropdownProps = {
@@ -37,8 +37,12 @@ export function CustomDropdownOption({
   onClick?: () => void
 }) {
   return (
-    <MenuItem {...props} onClick={onSelect}>
-      <div className="flex items-center justify-center flex-auto gap-3">
+    <MenuItem
+      {...props}
+      onClick={onSelect}
+      sx={{ '& .primary-text': { width: '100%' } }}
+    >
+      <div className="flex items-center justify-center flex-auto gap-3 w-full">
         <div className="inline-flex w-4 h-4">
           {selected ? (
             <Icon
@@ -49,7 +53,9 @@ export function CustomDropdownOption({
             />
           ) : null}
         </div>
-        <div className={cns(selected && 'font-semibold', 'flex flex-col')}>
+        <div
+          className={cns(selected && 'font-semibold', 'flex flex-col w-full')}
+        >
           {children}
         </div>
       </div>
@@ -64,14 +70,41 @@ export function CustomDropdown({
   buttonElement,
   children,
 }: CustomDropdownProps) {
+  const dropdownRef = useRef<MenuDropdownRef>(null)
+
+  const wrapChildrenWithCloseHandler = (children: ReactNode): ReactNode => {
+    return React.Children.map(children, (child) => {
+      if (!React.isValidElement(child)) return child
+
+      if (child.type === 'button' && child.props.onClick) {
+        return React.cloneElement(child, {
+          onClick: (e: React.MouseEvent) => {
+            child.props.onClick(e)
+            dropdownRef.current?.closeMenu()
+          },
+        })
+      }
+
+      if (child.props.children) {
+        return React.cloneElement(child, {
+          children: wrapChildrenWithCloseHandler(child.props.children),
+        })
+      }
+
+      return child
+    })
+  }
+
   return (
     <MenuDropdown
+      ref={dropdownRef}
       className={className}
       title={title}
       variant={variant}
       buttonElement={buttonElement}
+      paperClassName="!min-w-[250px]"
     >
-      {children}
+      {wrapChildrenWithCloseHandler(children)}
     </MenuDropdown>
   )
 }
