@@ -36,7 +36,7 @@ const CustomTooltip = (
     props
 
   const tooltipContainerStyles =
-    index === 0 || isLastStep || index === 4 ? 'p-10 max-w-[650px]' : 'p-4 max-w-[334px]'
+    index === 0 || isLastStep ? 'p-10 max-w-[650px]' : 'p-4 max-w-[334px]'
   const titleStyles =
     index === 0 ? 'text-[22px] leading-[30px]' : 'text-base leading-6'
   const buttonContainerStyles = index === 0 || isLastStep ? 'mt-10' : 'mt-6'

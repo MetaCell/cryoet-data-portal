@@ -28,6 +28,26 @@ const keyboardShortcuts = [
   { key: 's', description: 'Toggle cross-sections' },
 ]
 
+const updateCustomWrapperPosition = () => {
+  const tooltipWrapper = document.querySelector('.__floater')
+  const target = getIframeElement('.neuroglancer-layer-side-panel-tab-view')
+
+  if (tooltipWrapper !== null && target !== 'body') {
+    const rect = (target as HTMLElement).getBoundingClientRect()
+    const newTop = rect.top
+    const old3DTransform = tooltipWrapper.style.transform
+    // Replace the Y in the old 3D transform with the new Y value
+    const new3DTransform = old3DTransform.replace(
+      /translate3d\(([^,]+),\s*([^,]+),\s*([^,]+)\)/,
+      `translate3d($1, ${newTop}px, $3)`,
+    )
+    tooltipWrapper.style.transform = new3DTransform
+    console.log(new3DTransform, tooltipWrapper.style.transform)
+  } else {
+    console.error('Target element not found!')
+  }
+}
+
 const getIframeElement = (selector: string): HTMLElement | string => {
   const iframe = document.querySelector('iframe')
   if (iframe?.contentDocument) {
@@ -164,8 +184,11 @@ export const getTutorialSteps: () => Step[] = () => [
     ),
     title: 'Layer management',
     placement: 'right-start',
+    floaterProps: {
+      callback: updateCustomWrapperPosition
+    },
     content: (
-      <StepContent variant="simple" className="!flex-row">
+      <StepContent variant="simple">
         <div className="mt-4 mb-4">
           <img
             src="/images/neuroglancer_tour/layer_management.gif"
