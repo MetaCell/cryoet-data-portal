@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { ReactNode, useMemo } from 'react'
 
 import { SmallChevronRightIcon } from 'app/components/icons'
 import { Link } from 'app/components/Link'
@@ -13,6 +13,8 @@ import {
 import { BreadcrumbType } from 'app/types/breadcrumbs'
 import { cns } from 'app/utils/cns'
 
+import { Tooltip } from './Tooltip'
+
 function Breadcrumb({
   text,
   link,
@@ -20,7 +22,7 @@ function Breadcrumb({
   type,
   datasetId,
 }: {
-  text: string
+  text: ReactNode
   link?: string
   className?: string
   type?: BreadcrumbType
@@ -54,9 +56,11 @@ function Breadcrumb({
 export function Breadcrumbs({
   variant,
   data,
+  activeBreadcrumbText,
 }: {
-  variant: 'dataset' | 'deposition' | 'run'
+  variant: 'dataset' | 'deposition' | 'run' | 'neuroglancer'
   data: { id: number; title: string }
+  activeBreadcrumbText?: ReactNode
 }) {
   const { t } = useI18n()
 
@@ -164,15 +168,53 @@ export function Breadcrumbs({
     )
   }
 
+  const buildNeuroglancerBreadcrumb = () => {
+    const neuroglancerChevronIcon = (
+      <SmallChevronRightIcon className="w-[8px] h-[8px] shrink-0 text-[#999] fill-[#999]" />
+    )
+    return (
+      <div className="flex flex-row gap-sds-s text-dark-sds-color-primitive-gray-500 fill-[#999] font-normal text-sds-body-s-400-wide leading-sds-body-s items-center whitespace-nowrap content-start">
+        <Tooltip
+          tooltip={data.title || t('dataset')}
+          className="overflow-hidden overflow-ellipsis"
+        >
+          <Breadcrumb
+            text={data.title || t('dataset')}
+            link={singleDatasetLink}
+            className="overflow-ellipsis overflow-hidden flex-initial"
+            type={BreadcrumbType.SingleDataset}
+            datasetId={data.id}
+          />
+        </Tooltip>
+
+        {activeBreadcrumbText && (
+          <>
+            {neuroglancerChevronIcon}
+            <Breadcrumb
+              text={activeBreadcrumbText}
+              className={
+                'text-dark-sds-color-primitive-gray-900 shrink-0 !font-normal'
+              }
+            />
+          </>
+        )}
+      </div>
+    )
+  }
+
   const breadCrumbVariations = {
     dataset: buildDatasetBreadcrumb,
     deposition: buildDepositionBreadcrumb,
     run: buildRunBreadcrumb,
+    neuroglancer: buildNeuroglancerBreadcrumb,
   }
 
   return (
     <div
-      className="flex flex-col flex-auto gap-1"
+      className={cns(
+        variant === 'neuroglancer' && 'max-w-xl',
+        'flex flex-col flex-auto gap-1',
+      )}
       data-testid={TestIds.Breadcrumbs}
     >
       {returnToDepositionLink && (
