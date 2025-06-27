@@ -35,8 +35,8 @@ import {
 import { CryoETHomeLink } from '../Layout/CryoETHomeLink'
 import { Tooltip } from '../Tooltip'
 import { NeuroglancerBanner } from './NeuroglancerBanner'
-import { getTutorialSteps } from './steps'
-import { Tour } from './Tour'
+import { getTutorialSteps, proxyStepSelectors } from './steps'
+import { ProxyOverlayWrapper, Tour } from './Tour'
 
 type Run = GetRunByIdV2Query['runs'][number]
 type Tomogram = GetRunByIdV2Query['tomograms'][number]
@@ -791,7 +791,13 @@ function ViewerPage({
           />
         )}
       </div>
-      {run && (
+      {run && tourRunning && (
+        <ProxyOverlayWrapper
+          selectors={proxyStepSelectors}
+          stepIndex={stepIndex}
+        />
+      )}
+      {run && tourRunning && (
         <Tour
           run={tourRunning}
           stepIndex={stepIndex}

@@ -10,6 +10,93 @@ import Joyride, {
 } from 'react-joyride'
 
 import { cns } from 'app/utils/cns'
+import { useEffect, useState, useRef } from 'react'
+
+const ProxyOverlay: React.FC<{
+  targetSelector: string
+  className: string
+  stepIndex: number
+}> = ({ targetSelector, className, stepIndex }) => {
+  const [style, setStyle] = useState<React.CSSProperties | undefined>(undefined)
+  const hasPositioned = useRef(false)
+  useEffect(() => {
+    console.log('ProxyOverlay useEffect called for:', targetSelector)
+    let intervalId: number
+
+    const checkPositioned = () => {
+      console.log('Checking position for:', targetSelector)
+      if (hasPositioned.current) {
+        console.log('Already positioned for:', targetSelector)
+        return
+      }
+      const ready = updatePosition()
+      if (ready && !hasPositioned.current) {
+        hasPositioned.current = true
+        clearInterval(intervalId)
+        window.removeEventListener('resize', updatePosition)
+      }
+    }
+
+    const updatePosition = () => {
+      const iframe = document.querySelector(
+        'iframe',
+      ) as HTMLIFrameElement | null
+      const target = iframe?.contentDocument?.querySelector(
+        targetSelector,
+      ) as HTMLElement | null
+      if (!iframe || !target) return
+
+      console.log('Updating position for:', targetSelector)
+      const iframeRect = iframe.getBoundingClientRect()
+      const targetRect = target.getBoundingClientRect()
+
+      setStyle({
+        position: 'absolute',
+        top: targetRect.top + iframeRect.top,
+        left: targetRect.left + iframeRect.left,
+        width: targetRect.width,
+        height: targetRect.height,
+        zIndex: -1,
+        pointerEvents: 'none',
+        backgroundColor: 'transparent',
+      })
+      return true
+    }
+
+    // Poll for the initial position
+    intervalId = window.setInterval(checkPositioned, 1000)
+    updatePosition()
+
+    return () => {
+      clearInterval(intervalId)
+      window.removeEventListener('resize', updatePosition)
+    }
+  }, [targetSelector, stepIndex])
+
+  console.log('Rendering ProxyOverlay for:', targetSelector)
+  const sanitizedSelector = targetSelector.replace(/[^a-zA-Z0-9-_:.]/g, '-')
+  return <div className={className} id={sanitizedSelector} style={style} />
+}
+
+export const ProxyOverlayWrapper: React.FC<{
+  selectors: { target: string; className: string }[]
+  stepIndex: number
+}> = ({ selectors, stepIndex }) => {
+  // Get the unique target selectors from the steps
+  console.log('ProxyOverlayWrapper selectors:', selectors)
+  return (
+    <>
+      {selectors.map((selector) => (
+        <ProxyOverlay
+          targetSelector={selector.target}
+          className={selector.className}
+          stepIndex={stepIndex}
+          key={selector.target + selector.className + stepIndex}
+        />
+      ))}
+    </>
+  )
+}
 
 interface CustomTourProps {
   steps: Step[]
