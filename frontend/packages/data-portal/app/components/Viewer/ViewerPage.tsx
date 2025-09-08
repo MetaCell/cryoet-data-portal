@@ -42,6 +42,7 @@ import {
   isAllLayerActive,
   isCurrentLayout,
   isDepositionActivated,
+  isTomogramActivated,
   isDimensionPanelVisible,
   isTopBarVisible,
   panelsDefaultValues,
@@ -68,6 +69,7 @@ import { Tour } from './Tour'
 import styles from './ViewerPage.module.css'
 
 type Run = GetRunByIdV2Query['runs'][number]
+type Tomograms = GetRunByIdV2Query['tomograms']
 type Annotations = Run['annotations']
 type Annotation = Annotations['edges'][number]['node']
 interface AnnotationUIConfig {
@@ -118,9 +120,11 @@ const isSmallScreen = () => {
 
 export function ViewerPage({
   run,
+  tomograms,
   shouldStartTour = false,
 }: {
   run: Run
+  tomograms: Tomograms
   shouldStartTour?: boolean
 }) {
   const { t } = useI18n()
@@ -147,6 +151,7 @@ export function ViewerPage({
 
   const depositionConfigs = buildDepositionsConfig(run.annotations)
   const shouldShowAnnotationDropdown = Object.keys(depositionConfigs).length > 0
+  const shouldShowTomogramDropdown = tomograms.length > 1
 
   const scheduleRefresh = () => {
     setRenderVersion(renderVersion + 1)
@@ -347,6 +352,36 @@ export function ViewerPage({
         <div className="basis-sds-xxl flex-grow md:mr-sds-xxl" />
         <div className="flex basis-auto flex-shrink-0">
           <div className="flex items-center pt-1 gap-[1px] sm:gap-1 sm:pt-0">
+            {shouldShowTomogramDropdown && (
+              <NeuroglancerDropdown title="Tomograms" variant="outlined">
+                {tomograms.map((tomogram) => {
+                  return (
+                    <NeuroglancerDropdownOption
+                      key={tomogram.id.toString()}
+                      selected={isTomogramActivated(tomogram.id)}
+                      onSelect={() => {
+                        updateState((state) => {
+                          // TODO need to turn the neuroglancer config into state
+                          console.debug(
+                            'Activating tomogram',
+                            tomogram.neuroglancerConfig,
+                            tomogram,
+                          )
+                          return state
+                        })
+                      }}
+                    >
+                      <span className="line-clamp-3">
+                        {tomogram.name || t('tomogramName')}
+                      </span>
+                      <span className="text-sds-body-xxxs-400-narrow text-light-sds-color-primitive-gray-600">
+                        {IdPrefix.Tomogram}-{tomogram.id}
+                      </span>
+                    </NeuroglancerDropdownOption>
+                  )
+                })}
+              </NeuroglancerDropdown>
+            )}
             {shouldShowAnnotationDropdown && (
               <NeuroglancerDropdown title="Annotations" variant="outlined">
                 <MenuDropdownSection title="Show annotations for deposition">

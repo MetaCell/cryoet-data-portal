@@ -301,6 +301,11 @@ export function toggleOrMakeDimensionPanel() {
   else updateState(toggleDimensionPanelVisible)
 }
 
+export function isTomogramActivated(tomogramId: number) {
+  const layers = currentNeuroglancerState().layers || []
+  return layers.some((l) => l.name && l.name.includes(`${tomogramId}`))
+}
+
 export function isDepositionActivated(
   depositionEntries: (string | undefined)[],
 ) {
