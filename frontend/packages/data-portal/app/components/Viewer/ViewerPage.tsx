@@ -358,16 +358,18 @@ export function ViewerPage({
                   return (
                     <NeuroglancerDropdownOption
                       key={tomogram.id.toString()}
-                      selected={isTomogramActivated(tomogram.id)}
+                      selected={isTomogramActivated(
+                        tomogram.neuroglancerConfig,
+                      )}
+                      disabled={!tomogram.neuroglancerConfig}
                       onSelect={() => {
                         updateState((state) => {
-                          // TODO need to turn the neuroglancer config into state
-                          console.debug(
-                            'Activating tomogram',
-                            tomogram.neuroglancerConfig,
-                            tomogram,
-                          )
-                          return state
+                          return {
+                            ...state,
+                            neuroglancer: JSON.parse(
+                              tomogram.neuroglancerConfig!,
+                            ),
+                          }
                         })
                       }}
                     >

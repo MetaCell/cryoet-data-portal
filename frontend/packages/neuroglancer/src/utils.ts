@@ -79,7 +79,12 @@ interface ToolPaletteState extends PanelState {
 }
 
 interface LayerWithSource extends LayerElement {
-  source: string | { url?: string }
+  source:
+    | string
+    | {
+        url: string
+        transform?: { outputDimensions: unknown; inputDimensions: unknown }
+      }
   archived?: boolean
 }
 

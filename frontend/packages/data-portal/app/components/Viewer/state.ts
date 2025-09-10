@@ -8,6 +8,7 @@ import {
   NeuroglancerLayout,
   ResolvedSuperState,
   updateState,
+  NeuroglancerState,
 } from 'neuroglancer'
 
 const TOUR_PANEL_SIZE = 375
@@ -301,9 +302,15 @@ export function toggleOrMakeDimensionPanel() {
   else updateState(toggleDimensionPanelVisible)
 }
 
-export function isTomogramActivated(tomogramId: number) {
+export function isTomogramActivated(tomogramConfig: string | undefined | null) {
+  if (!tomogramConfig) return false
   const layers = currentNeuroglancerState().layers || []
-  return layers.some((l) => l.name && l.name.includes(`${tomogramId}`))
+  const jsonConfig = JSON.parse(tomogramConfig) as NeuroglancerState
+  const tomogramSource = jsonConfig.layers![0].source
+  // if url in the source, we need to extract that, otherwise can directly use source
+  const sourceUrl =
+    typeof tomogramSource === 'string' ? tomogramSource : tomogramSource.url
+  return layers.some((l) => l.source === sourceUrl && l.type === 'image')
 }
 
 export function isDepositionActivated(
