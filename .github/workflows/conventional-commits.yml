@@ -2,7 +2,9 @@
 name: conventional commits check
 on:
   pull_request:
-    branches: main
+    branches:
+      - main
+      - develop-ghactions
     types:
       - edited
       - opened
