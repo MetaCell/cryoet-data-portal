@@ -92,6 +92,13 @@ interface WatchableBoolean {
   value: boolean
 }
 
+export function getLayerSourceUrl(layer: LayerWithSource): string {
+  if (typeof layer.source === 'string') {
+    return layer.source
+  }
+  return layer.source.url
+}
+
 const emptySuperState = (config: string): SuperState => {
   return {
     neuroglancer: config.length > 0 ? decompressHash(config) : '',

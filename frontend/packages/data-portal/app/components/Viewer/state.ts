@@ -9,6 +9,7 @@ import {
   ResolvedSuperState,
   updateState,
   NeuroglancerState,
+  getLayerSourceUrl,
 } from 'neuroglancer'
 
 const TOUR_PANEL_SIZE = 375
@@ -306,11 +307,58 @@ export function isTomogramActivated(tomogramConfig: string | undefined | null) {
   if (!tomogramConfig) return false
   const layers = currentNeuroglancerState().layers || []
   const jsonConfig = JSON.parse(tomogramConfig) as NeuroglancerState
-  const tomogramSource = jsonConfig.layers![0].source
-  // if url in the source, we need to extract that, otherwise can directly use source
-  const sourceUrl =
-    typeof tomogramSource === 'string' ? tomogramSource : tomogramSource.url
-  return layers.some((l) => l.source === sourceUrl && l.type === 'image')
+  const newLayers = jsonConfig.layers || []
+  const tomogramLayer = newLayers.find((l) => l.type === 'image')
+  if (!tomogramLayer) return false
+  return layers.some(
+    (l) => l.source === getLayerSourceUrl(tomogramLayer) && l.type === 'image',
+  )
+}
+
+export function replaceOnlyTomogram(
+  currentState: NeuroglancerState,
+  newState: NeuroglancerState,
+) {
+  // The first image layer is always the tomogram -- we can completely replace that layer
+  // For the other layers, we only need to adjust the "source" because they can have
+  // different transforms needed
+  if (!newState.layers) return currentState
+  const newLayers = newState.layers
+  const newTomogramLayer = newLayers.find((l) => l.type === 'image')
+  if (!newTomogramLayer) return currentState // No tomogram layer in the new state
+  const currentLayers = currentState.layers || []
+
+  // First, let's check for the tomogram layer in the current state
+  const tomogramLayerIndex = currentLayers.findIndex((l) => l.type === 'image')
+  if (tomogramLayerIndex === -1) {
+    currentLayers.unshift(newTomogramLayer)
+  } else {
+    currentLayers[tomogramLayerIndex] = newTomogramLayer
+  }
+
+  // For the other layers, we need to update their sources if they exist in both states
+  for (const newLayer of newLayers) {
+    if (newLayer.type === 'image') continue // Skip the tomogram layer
+    const matchingLayer = currentLayers.find(
+      (l) => getLayerSourceUrl(l) === getLayerSourceUrl(newLayer),
+    )
+    if (matchingLayer) {
+      matchingLayer.source = newLayer.source
+    } else {
+      currentLayers.push(newLayer)
+    }
+  }
+
+  // TODO we also should ideally handle that to be in the same "view" in the new data
+  // we should adjust the navigation state and projection etc based on the ratio of the
+  // starting state voxel spacing and the new state voxel spacing
+  // for the new state, we can directly get this from the metadata. But for the current
+  // state, we need to extract it from the state information
+  // so it might be easier to follow the same approach for both the old and new state
+  return {
+    ...currentState,
+    layers: currentLayers,
+  }
 }
 
 export function isDepositionActivated(

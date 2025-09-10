@@ -63,6 +63,7 @@ import {
   toggleShowSections,
   toggleTopBar,
   ViewerPageSuperState,
+  replaceOnlyTomogram,
 } from './state'
 import { getTutorialSteps, proxyStepSelectors } from './steps'
 import { Tour } from './Tour'
@@ -363,11 +364,14 @@ export function ViewerPage({
                       )}
                       disabled={!tomogram.neuroglancerConfig}
                       onSelect={() => {
+                        // TODO want to allow reselect of current?
+                        // Allowing it could be useful because it would allow resetting mistakes
                         updateState((state) => {
                           return {
                             ...state,
-                            neuroglancer: JSON.parse(
-                              tomogram.neuroglancerConfig!,
+                            neuroglancer: replaceOnlyTomogram(
+                              state.neuroglancer,
+                              JSON.parse(tomogram.neuroglancerConfig!),
                             ),
                           }
                         })
