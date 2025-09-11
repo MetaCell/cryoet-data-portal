@@ -60,7 +60,11 @@ export default function RunByIdViewerPage() {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <ViewerPage run={run} tomograms={tomograms} shouldStartTour={shouldStartTour} />
+      <ViewerPage
+        run={run}
+        tomograms={tomograms}
+        shouldStartTour={shouldStartTour}
+      />
     </Suspense>
   )
 }

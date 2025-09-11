@@ -5,12 +5,12 @@ import {
   currentNeuroglancer,
   currentNeuroglancerState,
   currentState,
+  DimensionValue,
+  getLayerSourceUrl,
   NeuroglancerLayout,
+  NeuroglancerState,
   ResolvedSuperState,
   updateState,
-  NeuroglancerState,
-  getLayerSourceUrl,
-  DimensionValue,
 } from 'neuroglancer'
 
 const TOUR_PANEL_SIZE = 375

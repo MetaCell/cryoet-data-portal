@@ -3,6 +3,7 @@ import { SnackbarCloseReason } from '@mui/material/Snackbar'
 import {
   currentNeuroglancerState,
   NeuroglancerAwareIframe,
+  NeuroglancerState,
   NeuroglancerWrapper,
   updateState,
 } from 'neuroglancer'
@@ -43,10 +44,11 @@ import {
   isAllLayerActive,
   isCurrentLayout,
   isDepositionActivated,
-  isTomogramActivated,
   isDimensionPanelVisible,
+  isTomogramActivated,
   isTopBarVisible,
   panelsDefaultValues,
+  replaceOnlyTomogram,
   resolveStateBool,
   setCurrentLayout,
   setTopBarVisibleFromSuperState,
@@ -64,7 +66,6 @@ import {
   toggleShowSections,
   toggleTopBar,
   ViewerPageSuperState,
-  replaceOnlyTomogram,
 } from './state'
 import { getTutorialSteps, proxyStepSelectors } from './steps'
 import { Tour } from './Tour'
@@ -372,7 +373,9 @@ export function ViewerPage({
                             ...state,
                             neuroglancer: replaceOnlyTomogram(
                               state.neuroglancer,
-                              JSON.parse(tomogram.neuroglancerConfig!),
+                              JSON.parse(
+                                tomogram.neuroglancerConfig!,
+                              ) as NeuroglancerState,
                             ),
                           }
                         })
