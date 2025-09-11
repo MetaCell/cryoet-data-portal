@@ -19,6 +19,7 @@ import { useEffectOnce } from 'app/hooks/useEffectOnce'
 import { useI18n } from 'app/hooks/useI18n'
 import { useTour } from 'app/hooks/useTour'
 import { cns } from 'app/utils/cns'
+import { getTomogramName } from 'app/utils/tomograms'
 
 import { ReusableSnackbar } from '../common/ReusableSnackbar/ReusableSnackbar'
 import {
@@ -378,7 +379,8 @@ export function ViewerPage({
                       }}
                     >
                       <span className="line-clamp-3">
-                        {tomogram.name || t('tomogramName')}
+                        {getTomogramName(tomogram)} (
+                        {t('unitAngstrom', { value: tomogram.voxelSpacing })})
                       </span>
                       <span className="text-sds-body-xxxs-400-narrow text-light-sds-color-primitive-gray-600">
                         {IdPrefix.Tomogram}-{tomogram.id}
