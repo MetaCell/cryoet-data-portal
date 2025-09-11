@@ -18,7 +18,10 @@ export interface NeuroglancerState
   selection?: PanelState
   toolPalettes?: Record<string, ToolPaletteState>
   layers?: LayerWithSource[]
+  dimensions?: { [key: string]: DimensionValue }
 }
+
+export type DimensionValue = [number, string]
 
 export interface SuperState extends Record<string, unknown> {
   neuroglancer: string

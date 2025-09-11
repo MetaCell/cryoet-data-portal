@@ -10,6 +10,7 @@ import {
   updateState,
   NeuroglancerState,
   getLayerSourceUrl,
+  DimensionValue,
 } from 'neuroglancer'
 
 const TOUR_PANEL_SIZE = 375
@@ -315,49 +316,74 @@ export function isTomogramActivated(tomogramConfig: string | undefined | null) {
   )
 }
 
+function inferVoxelSpacingFromState(state: NeuroglancerState) {
+  const { dimensions } = state
+  if (dimensions === undefined) {
+    throw new Error('Cannot infer voxel spacing without dimensions')
+  }
+  // Get the average of all dims, usually isotropic but just in case
+  const dimensionValues = Object.values(dimensions)
+  const averageUnit =
+    dimensionValues.reduce((a: number, b: DimensionValue) => a + b[0], 0) /
+    dimensionValues.length
+  return averageUnit
+}
+
 export function replaceOnlyTomogram(
-  currentState: NeuroglancerState,
+  incomingState: NeuroglancerState,
   newState: NeuroglancerState,
 ) {
   // The first image layer is always the tomogram -- we can completely replace that layer
   // For the other layers, we only need to adjust the "source" because they can have
   // different transforms needed
-  if (!newState.layers) return currentState
-  const newLayers = newState.layers
-  const newTomogramLayer = newLayers.find((l) => l.type === 'image')
-  if (!newTomogramLayer) return currentState // No tomogram layer in the new state
-  const currentLayers = currentState.layers || []
+  if (!newState.layers) return incomingState
+  const incomingLayers = newState.layers
+  const newTomogramLayer = incomingLayers.find((l) => l.type === 'image')
+  if (!newTomogramLayer) return incomingState // No tomogram layer in the new state
+  newTomogramLayer.visible = true
+  newTomogramLayer.archived = false
+  const newLayers = incomingState.layers || []
 
   // First, let's check for the tomogram layer in the current state
-  const tomogramLayerIndex = currentLayers.findIndex((l) => l.type === 'image')
+  const tomogramLayerIndex = newLayers.findIndex((l) => l.type === 'image')
   if (tomogramLayerIndex === -1) {
-    currentLayers.unshift(newTomogramLayer)
+    newLayers.unshift(newTomogramLayer)
   } else {
-    currentLayers[tomogramLayerIndex] = newTomogramLayer
+    newLayers[tomogramLayerIndex] = newTomogramLayer
   }
 
   // For the other layers, we need to update their sources if they exist in both states
-  for (const newLayer of newLayers) {
+  for (const newLayer of incomingLayers) {
     if (newLayer.type === 'image') continue // Skip the tomogram layer
-    const matchingLayer = currentLayers.find(
+    const matchingLayer = newLayers.find(
       (l) => getLayerSourceUrl(l) === getLayerSourceUrl(newLayer),
     )
     if (matchingLayer) {
       matchingLayer.source = newLayer.source
     } else {
-      currentLayers.push(newLayer)
+      newLayers.push(newLayer)
     }
   }
 
-  // TODO we also should ideally handle that to be in the same "view" in the new data
-  // we should adjust the navigation state and projection etc based on the ratio of the
-  // starting state voxel spacing and the new state voxel spacing
-  // for the new state, we can directly get this from the metadata. But for the current
-  // state, we need to extract it from the state information
-  // so it might be easier to follow the same approach for both the old and new state
+  // Adjust the zoom levels and position to keep view consistent when switching
+  const currentSpacing = inferVoxelSpacingFromState(incomingState)
+  const newSpacing = inferVoxelSpacingFromState(newState)
+  const voxelRatio = newSpacing / currentSpacing
+  const newCrossSectionScale = incomingState.crossSectionScale
+    ? incomingState.crossSectionScale * voxelRatio
+    : undefined
+  const newProjectionScale = incomingState.projectionScale
+    ? incomingState.projectionScale * voxelRatio
+    : undefined
+  const newPosition = incomingState.position
+    ? incomingState.position.map((x) => x * voxelRatio)
+    : undefined
   return {
-    ...currentState,
-    layers: currentLayers,
+    ...incomingState,
+    layers: newLayers,
+    crossSectionScale: newCrossSectionScale,
+    projectionScale: newProjectionScale,
+    position: newPosition,
   }
 }
 
