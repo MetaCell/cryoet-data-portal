@@ -366,8 +366,12 @@ export function ViewerPage({
                       )}
                       disabled={!tomogram.neuroglancerConfig}
                       onSelect={() => {
-                        // TODO want to allow reselect of current?
-                        // Allowing it could be useful because it would allow resetting mistakes
+                        const isCurrentlyActive = isTomogramActivated(
+                          tomogram.neuroglancerConfig,
+                        )
+                        if (isCurrentlyActive) {
+                          return
+                        }
                         updateState((state) => {
                           return {
                             ...state,
@@ -382,11 +386,13 @@ export function ViewerPage({
                       }}
                     >
                       <span className="line-clamp-3">
-                        {getTomogramName(tomogram)} (
-                        {t('unitAngstrom', { value: tomogram.voxelSpacing })})
+                        {getTomogramName(tomogram)}
                       </span>
                       <span className="text-sds-body-xxxs-400-narrow text-light-sds-color-primitive-gray-600">
                         {IdPrefix.Tomogram}-{tomogram.id}
+                        {` · `}
+                        {t('unitAngstrom', { value: tomogram.voxelSpacing })} (
+                        {tomogram.sizeX}, {tomogram.sizeY}, {tomogram.sizeZ}) px
                       </span>
                     </NeuroglancerDropdownOption>
                   )
