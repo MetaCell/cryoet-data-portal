@@ -3,6 +3,7 @@ import { SnackbarCloseReason } from '@mui/material/Snackbar'
 import {
   currentNeuroglancerState,
   NeuroglancerAwareIframe,
+  NeuroglancerState,
   NeuroglancerWrapper,
   updateState,
 } from 'neuroglancer'
@@ -19,6 +20,7 @@ import { useEffectOnce } from 'app/hooks/useEffectOnce'
 import { useI18n } from 'app/hooks/useI18n'
 import { useTour } from 'app/hooks/useTour'
 import { cns } from 'app/utils/cns'
+import { getTomogramName } from 'app/utils/tomograms'
 
 import { ReusableSnackbar } from '../common/ReusableSnackbar/ReusableSnackbar'
 import {
@@ -43,8 +45,12 @@ import {
   isCurrentLayout,
   isDepositionActivated,
   isDimensionPanelVisible,
+  isTomogramActivated,
+  isTomogramActivatedFromConfig,
   isTopBarVisible,
   panelsDefaultValues,
+  replaceOnlyTomogram,
+  replaceOnlyTomogramSource,
   resolveStateBool,
   setCurrentLayout,
   setTopBarVisibleFromSuperState,
@@ -68,11 +74,24 @@ import { Tour } from './Tour'
 import styles from './ViewerPage.module.css'
 
 type Run = GetRunByIdV2Query['runs'][number]
+type Tomograms = GetRunByIdV2Query['tomograms']
+type Tomogram = Tomograms[number]
 type Annotations = Run['annotations']
 type Annotation = Annotations['edges'][number]['node']
 interface AnnotationUIConfig {
   name?: string
   annotation: Annotation
+}
+
+const toZarr = (httpsMrcFile: string | undefined | null) => {
+  if (!httpsMrcFile) return httpsMrcFile
+  return `zarr://${httpsMrcFile.replace('.mrc', '.zarr')}`
+}
+
+const selectedTomogram = (tomogram: Tomogram) => {
+  return tomogram.neuroglancerConfig
+    ? isTomogramActivatedFromConfig(tomogram.neuroglancerConfig)
+    : isTomogramActivated(toZarr(tomogram.httpsMrcFile))
 }
 
 const buildDepositionsConfig = (
@@ -118,9 +137,11 @@ const isSmallScreen = () => {
 
 export function ViewerPage({
   run,
+  tomograms,
   shouldStartTour = false,
 }: {
   run: Run
+  tomograms: Tomograms
   shouldStartTour?: boolean
 }) {
   const { t } = useI18n()
@@ -141,12 +162,15 @@ export function ViewerPage({
   const iframeRef = useRef<NeuroglancerAwareIframe>(null)
   const hashReady = useRef<boolean>(false)
   const helpMenuRef = useRef<MenuDropdownRef>(null)
+  const voxelSpacing = useRef<number>(0)
+  const alignmentId = useRef<number>(0)
 
   const shareSnackbar = useAutoHideSnackbar()
   const snapSnackbar = useAutoHideSnackbar()
 
   const depositionConfigs = buildDepositionsConfig(run.annotations)
   const shouldShowAnnotationDropdown = Object.keys(depositionConfigs).length > 0
+  const shouldShowTomogramDropdown = tomograms.length > 1
 
   const scheduleRefresh = () => {
     setRenderVersion(renderVersion + 1)
@@ -202,6 +226,14 @@ export function ViewerPage({
     }
     hashReady.current = true
 
+    const currentlyActiveTomogram = tomograms.find(
+      (tomogram) =>
+        isTomogramActivatedFromConfig(tomogram.neuroglancerConfig) ||
+        isTomogramActivated(toZarr(tomogram.httpsMrcFile)),
+    )
+    voxelSpacing.current = currentlyActiveTomogram?.voxelSpacing || 0
+    alignmentId.current = currentlyActiveTomogram?.alignment?.id || 0
+
     window.addEventListener('keydown', keyDownHandler)
     setTourRunning(shouldStartTour)
     return () => {
@@ -214,6 +246,15 @@ export function ViewerPage({
       setupTourPanelState()
     }
   }, [tourRunning])
+
+  const unsupportedTomogramSwitch = (tomogram: Tomogram) => {
+    const hasFullState = !!tomogram.neuroglancerConfig
+    const hasSourceInSameSpace =
+      !!tomogram.s3OmezarrDir &&
+      voxelSpacing.current === tomogram.voxelSpacing &&
+      alignmentId.current === (tomogram.alignment?.id || 0)
+    return !(hasFullState || hasSourceInSameSpace)
+  }
 
   const handleOnStateChange = (state: ViewerPageSuperState) => {
     scheduleRefresh()
@@ -347,15 +388,59 @@ export function ViewerPage({
         <div className="basis-sds-xxl flex-grow md:mr-sds-xxl" />
         <div className="flex basis-auto flex-shrink-0">
           <div className="flex items-center pt-1 gap-[1px] sm:gap-1 sm:pt-0">
+            {shouldShowTomogramDropdown && (
+              <NeuroglancerDropdown title="Tomograms" variant="outlined">
+                <MenuDropdownSection title="Select tomogram">
+                  {tomograms.map((tomogram) => {
+                    return (
+                      <NeuroglancerDropdownOption
+                        key={tomogram.id.toString()}
+                        selected={selectedTomogram(tomogram)}
+                        disabled={unsupportedTomogramSwitch(tomogram)}
+                        onSelect={() => {
+                          if (selectedTomogram(tomogram)) return
+                          voxelSpacing.current = tomogram.voxelSpacing
+                          alignmentId.current = tomogram.alignment?.id || 0
+                          updateState((state) => {
+                            return {
+                              ...state,
+                              neuroglancer: tomogram.neuroglancerConfig
+                                ? replaceOnlyTomogram(
+                                    state.neuroglancer,
+                                    JSON.parse(
+                                      tomogram.neuroglancerConfig,
+                                    ) as NeuroglancerState,
+                                  )
+                                : replaceOnlyTomogramSource(
+                                    state.neuroglancer,
+                                    toZarr(tomogram.httpsMrcFile)!,
+                                  ),
+                            }
+                          })
+                        }}
+                        title={getTomogramName(tomogram)}
+                        subtitle={[
+                          `${IdPrefix.Tomogram}-${tomogram.id}`,
+                          `${t('unitAngstrom', { value: tomogram.voxelSpacing })} (${tomogram.sizeX}, ${tomogram.sizeY}, ${tomogram.sizeZ}) px`,
+                          tomogram.alignment?.id != null &&
+                            `${IdPrefix.Alignment}-${tomogram.alignment.id}`,
+                        ]
+                          .filter(Boolean)
+                          .join(' · ')}
+                      />
+                    )
+                  })}
+                </MenuDropdownSection>
+              </NeuroglancerDropdown>
+            )}
             {shouldShowAnnotationDropdown && (
               <NeuroglancerDropdown title="Annotations" variant="outlined">
                 <MenuDropdownSection title="Show annotations for deposition">
                   <NeuroglancerDropdownOption
                     selected={isAllLayerActive()}
                     onSelect={() => toggleAllDepositions()}
-                  >
-                    {t('allDepositions')}
-                  </NeuroglancerDropdownOption>
+                    title={t('allDepositions')}
+                  />
                   {Object.entries(depositionConfigs).map(
                     ([depositionId, depositions]) => {
                       const layersOfInterest = depositions.map((c) => c.name)
@@ -366,15 +451,12 @@ export function ViewerPage({
                           onSelect={() => {
                             toggleDepositions(layersOfInterest)
                           }}
-                        >
-                          <span className="line-clamp-3">
-                            {depositions?.[0].annotation?.deposition?.title ||
-                              'Deposition'}
-                          </span>
-                          <span className="text-sds-body-xxxs-400-narrow text-light-sds-color-primitive-gray-600">
-                            {IdPrefix.Deposition}-{depositionId}
-                          </span>
-                        </NeuroglancerDropdownOption>
+                          title={
+                            depositions?.[0].annotation?.deposition?.title ||
+                            'Deposition'
+                          }
+                          subtitle={`${IdPrefix.Deposition}-${depositionId}`}
+                        />
                       )
                     },
                   )}
@@ -388,53 +470,45 @@ export function ViewerPage({
                     isCurrentLayout('4panel') || isCurrentLayout('4panel-alt')
                   }
                   onSelect={() => setCurrentLayout('4panel')}
-                >
-                  {t('4panels')}
-                </NeuroglancerDropdownOption>
+                  title={t('4panels')}
+                />
                 <NeuroglancerDropdownOption
                   selected={isCurrentLayout('xy')}
                   onSelect={() => setCurrentLayout('xy')}
-                >
-                  XY
-                </NeuroglancerDropdownOption>
+                  title="XY"
+                />
                 <NeuroglancerDropdownOption
                   selected={isCurrentLayout('xz')}
                   onSelect={() => setCurrentLayout('xz')}
-                >
-                  XZ
-                </NeuroglancerDropdownOption>
+                  title="XZ"
+                />
                 <NeuroglancerDropdownOption
                   selected={isCurrentLayout('yz')}
                   onSelect={() => setCurrentLayout('yz')}
-                >
-                  YZ
-                </NeuroglancerDropdownOption>
+                  title="YZ"
+                />
                 <NeuroglancerDropdownOption
                   selected={isCurrentLayout('3d')}
                   onSelect={() => setCurrentLayout('3d')}
-                >
-                  3D
-                </NeuroglancerDropdownOption>
+                  title="3D"
+                />
               </MenuDropdownSection>
               <MenuDropdownSection title="Toggle Panels">
                 <NeuroglancerDropdownOption
                   selected={getCurrentState().savedPanelsStatus !== undefined}
                   onSelect={() => togglePanels()}
-                >
-                  {t('hideUI')}
-                </NeuroglancerDropdownOption>
+                  title={t('hideUI')}
+                />
                 <NeuroglancerDropdownOption
                   selected={isTopBarVisible()}
                   onSelect={() => toggleTopBar()}
-                >
-                  {t('showTopLayerBar')}
-                </NeuroglancerDropdownOption>
+                  title={t('showTopLayerBar')}
+                />
                 <NeuroglancerDropdownOption
                   selected={isDimensionPanelVisible()}
                   onSelect={toggleOrMakeDimensionPanel}
-                >
-                  {t('showPositionSelector')}
-                </NeuroglancerDropdownOption>
+                  title={t('showPositionSelector')}
+                />
               </MenuDropdownSection>
             </NeuroglancerDropdown>
             <NeuroglancerDropdown title="Actions" variant="outlined">
@@ -442,36 +516,36 @@ export function ViewerPage({
                 <NeuroglancerDropdownOption
                   selected={hasBoundingBox()}
                   onSelect={toggleBoundingBox}
+                  title={t('bbox')}
                 >
                   <div className="flex justify-between items-center">
-                    <p>{t('bbox')}</p>
                     <p className={helperText}>v</p>
                   </div>
                 </NeuroglancerDropdownOption>
                 <NeuroglancerDropdownOption
                   selected={axisLineEnabled()}
                   onSelect={toggleAxisLine}
+                  title={t('axisLines')}
                 >
                   <div className="flex justify-between items-center">
-                    <p>{t('axisLines')}</p>
                     <p className={helperText}>a</p>
                   </div>
                 </NeuroglancerDropdownOption>
                 <NeuroglancerDropdownOption
                   selected={showScaleBarEnabled()}
                   onSelect={toggleShowScaleBar}
+                  title={t('scaleBar')}
                 >
                   <div className="flex justify-between items-center">
-                    <p>{t('scaleBar')}</p>
                     <p className={helperText}>b</p>
                   </div>
                 </NeuroglancerDropdownOption>
                 <NeuroglancerDropdownOption
                   selected={showSectionsEnabled()}
                   onSelect={toggleShowSections}
+                  title={t('crossSection')}
                 >
                   <div className="flex justify-between items-center">
-                    <p>{t('crossSection')}</p>
                     <p className={helperText}>s</p>
                   </div>
                 </NeuroglancerDropdownOption>
@@ -480,9 +554,9 @@ export function ViewerPage({
                 <NeuroglancerDropdownOption
                   selected={false}
                   onSelect={handleSnapActionClick}
+                  title={t('snapAction')}
                 >
                   <div className="flex justify-between items-center">
-                    <p>{t('snapAction')}</p>
                     <p className={helperText}>z</p>
                   </div>
                 </NeuroglancerDropdownOption>
