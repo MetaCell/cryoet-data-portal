@@ -314,7 +314,7 @@ export function ViewerPage({
   const activeRunBreadcrumb = (
     <Tooltip
       tooltip={`Go to Run ${run.name || t('runName')}`}
-      className="flex items-center truncate max-w-0 lg:max-w-[10rem] xl:max-w-[16rem] 2xl:max-w-[20rem]"
+      className="flex items-center truncate max-w-0 lg:max-w-[10rem] xl:max-w-[12rem] 2xl:max-w-[20rem]"
     >
       <a href={`${window.origin}/runs/${run.id}`} className="truncate">
         {run.name}{' '}
